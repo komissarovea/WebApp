@@ -13,53 +13,40 @@ builder.Services.AddDbContext<DataContext>(opts =>
 var app = builder.Build();
 
 const string BASEURL = "api/products";
+var todoItems = app.MapGroup(BASEURL);
 
-app.MapGet($"{BASEURL}/{{id}}", async (HttpContext context, DataContext data) =>
+todoItems.MapGet("/{id}", async (long id, DataContext data) =>
 {
-    string? id = context.Request.RouteValues["id"] as string;
-    if (id != null)
-    {
-        Product? p = data.Products.Find(long.Parse(id));
-        if (p == null)
-        {
-            context.Response.StatusCode = StatusCodes.Status404NotFound;
-        }
-        else
-        {
-            context.Response.ContentType = "application/json";
-            await context.Response.WriteAsync(JsonSerializer.Serialize<Product>(p));
-        }
-    }
+    Product? p = await data.Products.FindAsync(id);
+    return p == null ? Results.NotFound() : TypedResults.Ok(p);
 });
 
-app.MapGet(BASEURL, async (HttpContext context, DataContext data) =>
-{
-    context.Response.ContentType = "application/json";
-    await context.Response.WriteAsync(JsonSerializer.Serialize<IEnumerable<Product>>(data.Products));
-});
+todoItems.MapGet("/", GetAllProducts);
 
-app.MapPost(BASEURL, async (HttpContext context, DataContext data) =>
+// Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{Name="Group Goggles"; Price=11.75; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
+todoItems.MapPost("/", async (Product p, DataContext data) =>
 {
-    Product? p = await JsonSerializer.DeserializeAsync<Product>(context.Request.Body);
-    if (p != null)
-    {
-        await data.AddAsync(p);
-        await data.SaveChangesAsync();
-        context.Response.StatusCode = StatusCodes.Status200OK;
-    }
+    await data.AddAsync(p);
+    await data.SaveChangesAsync();
+    return TypedResults.Created($"/todoitems/{p.ProductId}", p);
 });
 
 app.UseMiddleware<WebApp.TestMiddleware>();
 
 app.MapGet("/", () =>
 {
-    return "Hello World!";
+    return "Hello World2!";
 });
 
 var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<DataContext>();
 SeedData.SeedDatabase(context);
 
 app.Run();
+
+static async Task<IResult> GetAllProducts(DataContext db)
+{
+    return TypedResults.Ok(await db.Products.ToArrayAsync());
+}
 
 // app.Use(async (HttpContext context, Func<Task> next) =>
 // {
