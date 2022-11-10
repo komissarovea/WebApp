@@ -4,28 +4,26 @@ using WebApp.Models;
 namespace WebApp.Controllers
 {
     [Route("api/[controller]")]
-    //[ApiController]
     public class ProductsController : ControllerBase
     {
+        private DataContext context;
 
-        [AcceptVerbs]
+        public ProductsController(DataContext ctx)
+        {
+            context = ctx;
+        }
+
+        [HttpGet]
         public IEnumerable<Product> GetProducts()
         {
-            return new Product[]
-            {
-                new Product() { Name = "Product #1" },
-                new Product() { Name = "Product #2" },
-            };
+            return context.Products;
         }
 
         [HttpGet("{id}")]
-        public Product GetProduct([FromRoute] long id)
+        public Product? GetProduct([FromServices] ILogger<ProductsController> logger)
         {
-            return new Product()
-            {
-                ProductId = id,
-                Name = "Test Product"
-            };
+            logger.LogDebug("GetProduct Action Invoked");
+            return context.Products.FirstOrDefault();
         }
     }
 }
