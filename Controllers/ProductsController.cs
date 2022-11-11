@@ -35,5 +35,21 @@ namespace WebApp.Controllers
             context.Products.Add(product);
             context.SaveChanges();
         }
+
+        [HttpPut]
+        public void UpdateProduct([FromBody] Product product)
+        {
+            // Invoke-RestMethod http://localhost:5000/api/products -Method PUT -Body (@{ ProductId=1; Name="Green Kayak"; Price=275; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
+            context.Products.Update(product);
+            context.SaveChanges();
+        }
+
+        [HttpDelete("{id}")]
+        public void DeleteProduct(long id)
+        {
+            // Invoke-RestMethod http://localhost:5000/api/products/2 -Method DELETE
+            context.Products.Remove(new Product() { ProductId = id });
+            context.SaveChanges();
+        }
     }
 }
