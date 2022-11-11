@@ -27,5 +27,13 @@ namespace WebApp.Controllers
             return context.Products.Find(id);
             //return context.Products.FirstOrDefault();
         }
+
+        [HttpPost]
+        public void SaveProduct([FromBody] Product product)
+        {
+            // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ Name="SoccerBoots"; Price=89.99; CategoryId=2; SupplierId=2} | ConvertTo-Json) -ContentType "application/json"
+            context.Products.Add(product);
+            context.SaveChanges();
+        }
     }
 }
