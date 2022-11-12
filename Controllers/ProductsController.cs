@@ -29,6 +29,14 @@ namespace WebApp.Controllers
                 return NoContent();
             }
             return Ok(p);
+            // return Ok(new
+            // {
+            //     ProductId = p.ProductId,
+            //     Name = p.Name,
+            //     Price = p.Price,
+            //     CategoryId = p.CategoryId,
+            //     SupplierId = p.SupplierId
+            // });
         }
 
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ Name="SoccerBoots"; Price=89.99; CategoryId=2; SupplierId=2} | ConvertTo-Json) -ContentType "application/json"
