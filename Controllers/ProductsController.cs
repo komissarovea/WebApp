@@ -14,42 +14,40 @@ namespace WebApp.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> GetProducts(long? id)
+        public IAsyncEnumerable<Product> GetProducts()
         {
-            var product = context.Products.Find(id);
-            return product != null ? new[] { product } : context.Products;
+            return context.Products.AsAsyncEnumerable();
         }
 
         [HttpGet("{id}")]
-        public Product? GetProduct(long id, [FromServices] ILogger<ProductsController> logger)
+        public async Task<Product?> GetProduct(long id)
         {
-            logger.LogDebug("GetProduct Action Invoked");
-            return context.Products.Find(id);
-            //return context.Products.FirstOrDefault();
+            return await context.Products.FindAsync(id);
         }
 
+        // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ Name="SoccerBoots"; Price=89.99; CategoryId=2; SupplierId=2} | ConvertTo-Json) -ContentType "application/json"
         [HttpPost]
-        public void SaveProduct([FromBody] Product product)
+        public async Task SaveProduct([FromBody] Product product)
         {
-            // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ Name="SoccerBoots"; Price=89.99; CategoryId=2; SupplierId=2} | ConvertTo-Json) -ContentType "application/json"
-            context.Products.Add(product);
-            context.SaveChanges();
+            await context.Products.AddAsync(product);
+            await context.SaveChangesAsync();
         }
 
+
+        // Invoke-RestMethod http://localhost:5000/api/products -Method PUT -Body (@{ ProductId=1; Name="Green Kayak"; Price=275; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
         [HttpPut]
-        public void UpdateProduct([FromBody] Product product)
+        public async Task UpdateProduct([FromBody] Product product)
         {
-            // Invoke-RestMethod http://localhost:5000/api/products -Method PUT -Body (@{ ProductId=1; Name="Green Kayak"; Price=275; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
-            context.Products.Update(product);
-            context.SaveChanges();
+            context.Update(product);
+            await context.SaveChangesAsync();
         }
 
+        // Invoke-RestMethod http://localhost:5000/api/products/2 -Method DELETE
         [HttpDelete("{id}")]
-        public void DeleteProduct(long id)
+        public async Task DeleteProduct(long id)
         {
-            // Invoke-RestMethod http://localhost:5000/api/products/2 -Method DELETE
             context.Products.Remove(new Product() { ProductId = id });
-            context.SaveChanges();
+            await context.SaveChangesAsync();
         }
     }
 }

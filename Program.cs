@@ -27,6 +27,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+ThreadPool.GetMaxThreads(out int wt, out int cpt);
+System.Console.WriteLine($"MaxThreads {wt}, {cpt}, {ThreadPool.CompletedWorkItemCount}");
+ThreadPool.GetMinThreads(out wt, out cpt);
+System.Console.WriteLine($"GetMinThreads {wt}, {cpt}, {ThreadPool.PendingWorkItemCount}");
+ThreadPool.GetAvailableThreads(out wt, out cpt);
+System.Console.WriteLine($"GetAvailableThreads {wt}, {cpt}, {ThreadPool.ThreadCount}");
+
 app.UseCors(MyAllowSpecificOrigins);
 
 app.MapControllers();
