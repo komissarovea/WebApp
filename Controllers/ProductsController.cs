@@ -20,18 +20,25 @@ namespace WebApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<Product?> GetProduct(long id)
+        public async Task<IActionResult> GetProduct(long id)
         {
-            return await context.Products.FindAsync(id);
+            Product? p = await context.Products.FindAsync(id);
+            if (p == null)
+            {
+                return NoContent();
+            }
+            return Ok(p);
         }
 
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ Name="SoccerBoots"; Price=89.99; CategoryId=2; SupplierId=2} | ConvertTo-Json) -ContentType "application/json"
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ProductId=100; Name="Swim Buoy"; Price=19.99; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
         [HttpPost]
-        public async Task SaveProduct([FromBody] ProductBindingTarget target)
+        public async Task<IActionResult>SaveProduct([FromBody] ProductBindingTarget target)
         {
-            await context.Products.AddAsync(target.ToProduct());
+            Product p = target.ToProduct();
+            await context.Products.AddAsync(p);
             await context.SaveChangesAsync();
+            return Ok(p);
         }
 
 
