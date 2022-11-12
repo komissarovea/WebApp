@@ -3,6 +3,7 @@ using WebApp.Models;
 
 namespace WebApp.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class ProductsController : ControllerBase
     {
@@ -34,22 +35,22 @@ namespace WebApp.Controllers
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ProductId=100; Name="Swim Buoy"; Price=19.99; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
         // Invoke-WebRequest http://localhost:5000/api/products -Method POST -Body (@{Name="BootLaces"} | ConvertTo-Json) -ContentType "application/json"
         [HttpPost]
-        public async Task<IActionResult> SaveProduct([FromBody] ProductBindingTarget target)
+        public async Task<IActionResult> SaveProduct(ProductBindingTarget target) // [FromBody] not needed in api controller
         {
-            if (ModelState.IsValid)
-            {
-                Product p = target.ToProduct();
-                await context.Products.AddAsync(p);
-                await context.SaveChangesAsync();
-                return Ok(p);
-            }
-            return BadRequest(ModelState);
+            // if (ModelState.IsValid)
+            // {
+            Product p = target.ToProduct();
+            await context.Products.AddAsync(p);
+            await context.SaveChangesAsync();
+            return Created($"/api/products/{p.ProductId}", p);
+            // }
+            // return BadRequest(ModelState);
         }
 
 
         // Invoke-RestMethod http://localhost:5000/api/products -Method PUT -Body (@{ ProductId=1; Name="Green Kayak"; Price=275; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
         [HttpPut]
-        public async Task UpdateProduct([FromBody] Product product)
+        public async Task UpdateProduct(Product product) // [FromBody] not needed in api controller
         {
             context.Update(product);
             await context.SaveChangesAsync();
