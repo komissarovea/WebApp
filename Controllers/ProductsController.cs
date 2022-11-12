@@ -26,10 +26,11 @@ namespace WebApp.Controllers
         }
 
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ Name="SoccerBoots"; Price=89.99; CategoryId=2; SupplierId=2} | ConvertTo-Json) -ContentType "application/json"
+        // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ProductId=100; Name="Swim Buoy"; Price=19.99; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
         [HttpPost]
-        public async Task SaveProduct([FromBody] Product product)
+        public async Task SaveProduct([FromBody] ProductBindingTarget target)
         {
-            await context.Products.AddAsync(product);
+            await context.Products.AddAsync(target.ToProduct());
             await context.SaveChangesAsync();
         }
 
