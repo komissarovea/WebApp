@@ -33,7 +33,7 @@ namespace WebApp.Controllers
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ Name="SoccerBoots"; Price=89.99; CategoryId=2; SupplierId=2} | ConvertTo-Json) -ContentType "application/json"
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ProductId=100; Name="Swim Buoy"; Price=19.99; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
         [HttpPost]
-        public async Task<IActionResult>SaveProduct([FromBody] ProductBindingTarget target)
+        public async Task<IActionResult> SaveProduct([FromBody] ProductBindingTarget target)
         {
             Product p = target.ToProduct();
             await context.Products.AddAsync(p);
@@ -56,6 +56,21 @@ namespace WebApp.Controllers
         {
             context.Products.Remove(new Product() { ProductId = id });
             await context.SaveChangesAsync();
+        }
+
+        // http://localhost:5000/api/products/redirect
+        [HttpGet("redirect")]
+        public IActionResult Redirect()
+        {
+            return RedirectToRoute(new
+            {
+                controller = "Products",
+                action = "GetProduct",
+                Id = 3
+            });
+            // return RedirectToAction(nameof(GetProduct), new { Id = 3 });
+            // return Redirect("/api/products/1");
+            //  return LocalRedirect("http://google.com"); // exception!!!
         }
     }
 }
