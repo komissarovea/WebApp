@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -13,11 +14,19 @@ namespace WebApp.Controllers
         {
             context = ctx;
         }
-        
+
         [HttpGet("{id}")]
         public async Task<Supplier?> GetSupplier(long id)
         {
-            return await context.Suppliers.FindAsync(id);
+            Supplier supplier = await context.Suppliers.Include(s => s.Products).FirstAsync(s => s.SupplierId == id);
+            if (supplier.Products != null)
+            {
+                foreach (Product p in supplier.Products)
+                {
+                    p.Supplier = null;
+                };
+            }
+            return supplier;
         }
     }
 }
