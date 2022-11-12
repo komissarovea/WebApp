@@ -32,13 +32,18 @@ namespace WebApp.Controllers
 
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ Name="SoccerBoots"; Price=89.99; CategoryId=2; SupplierId=2} | ConvertTo-Json) -ContentType "application/json"
         // Invoke-RestMethod http://localhost:5000/api/products -Method POST -Body (@{ProductId=100; Name="Swim Buoy"; Price=19.99; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
+        // Invoke-WebRequest http://localhost:5000/api/products -Method POST -Body (@{Name="BootLaces"} | ConvertTo-Json) -ContentType "application/json"
         [HttpPost]
         public async Task<IActionResult> SaveProduct([FromBody] ProductBindingTarget target)
         {
-            Product p = target.ToProduct();
-            await context.Products.AddAsync(p);
-            await context.SaveChangesAsync();
-            return Ok(p);
+            if (ModelState.IsValid)
+            {
+                Product p = target.ToProduct();
+                await context.Products.AddAsync(p);
+                await context.SaveChangesAsync();
+                return Ok(p);
+            }
+            return BadRequest(ModelState);
         }
 
 
