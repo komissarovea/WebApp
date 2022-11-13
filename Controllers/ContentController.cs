@@ -49,19 +49,19 @@ namespace WebApp.Controllers
 
         // Invoke-RestMethod http://localhost:5000/api/content -Method POST -Body (@{ Name="Swimming Goggles"; Price=12.75; CategoryId=1; SupplierId=1} | ConvertTo-Json) -ContentType "application/json"
         [HttpPost]
-        [Consumes("application/json")]
+        [Consumes("application/json", "application/xml")]
         public string SaveProductJson(ProductBindingTarget product)
         {
             return $"JSON: {product.Name}";
         }
         
         // Invoke-RestMethod http://localhost:5000/api/content -Method POST -Body "<ProductBindingTarget xmlns=`"http://schemas.datacontract.org/2004/07/WebApp.Models`"><CategoryId>1</CategoryId><Name>Kayak</Name><Price>275.00</Price><SupplierId>1</SupplierId></ProductBindingTarget>" -ContentType "application/xml"
-        [HttpPost]
-        [Consumes("application/xml")]
-        public string SaveProductXml(ProductBindingTarget product)
-        {
-            return $"XML: {product.Name}";
-        }
+        // [HttpPost]
+        // [Consumes("application/xml")]
+        // public string SaveProductXml(ProductBindingTarget product)
+        // {
+        //     return $"XML: {product.Name}";
+        // }
 
     }
 }
