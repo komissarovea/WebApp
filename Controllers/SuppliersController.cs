@@ -32,6 +32,7 @@ namespace WebApp.Controllers
         }
 
         // Invoke-RestMethod http://localhost:5000/api/suppliers/1 -Method PATCH -ContentType "application/json" -Body '[{"op":"replace","path":"City","value":"Los Angeles"}]'
+        // https://www.rfc-editor.org/rfc/rfc6902#section-4.6
         [HttpPatch("{id}")]
         public async Task<Supplier?> PatchSupplier(long id, JsonPatchDocument<Supplier> patchDoc)
         {
