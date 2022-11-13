@@ -29,7 +29,12 @@ namespace WebApp.Controllers
             return await context.Products.FirstAsync();
         }
 
-        [HttpGet("object")]
+        // Invoke-WebRequest http://localhost:5000/api/content/object -Headers @{Accept="application/xml,application/json;q=0.8"} | select @{n='Content-Type';e={ $_.Headers."Content-Type"}}, Content
+        // http://localhost:5000/api/content/object/json
+        // http://localhost:5000/api/content/object/xml
+        [HttpGet("object/{format?}")]
+        [FormatFilter]
+        [Produces("application/json", "application/xml")]
         public async Task<ProductBindingTarget> GetObject()
         {
             Product p = await context.Products.FirstAsync();
