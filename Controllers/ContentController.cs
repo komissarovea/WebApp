@@ -21,7 +21,8 @@ namespace WebApp.Controllers
 
         // Invoke-WebRequest http://localhost:5000/api/content/object | select @{n='Content-Type';e={$_.Headers."Content-Type" }}, Content
         // Invoke-WebRequest http://localhost:5000/api/content/object -Headers @{Accept="application/xml"} | select @{n='Content-Type';e={ $_.Headers."Content-Type" }}, Content
-        // 
+        // Invoke-WebRequest http://localhost:5000/api/content/object -Headers @{Accept="application/xml,*/*;q=0.8"} | select @{n='Content-Type';e={ $_.Headers."Content-Type" }}, Content
+        // Invoke-WebRequest http://localhost:5000/api/content/object -Headers @{Accept="img/png"} | select @{n='Content-Type';e={ $_.Headers."Content-Type" }}, Content
         [HttpGet("object0")]
         public async Task<Product> GetObject0()
         {

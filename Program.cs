@@ -20,6 +20,12 @@ builder.Services.Configure<MvcNewtonsoftJsonOptions>(opts =>
     opts.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 });
 
+builder.Services.Configure<MvcOptions>(opts =>
+{
+    opts.RespectBrowserAcceptHeader = true;
+    opts.ReturnHttpNotAcceptable = true;
+});
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
