@@ -1,6 +1,7 @@
 @page "/pages/message"
 @model MessageModel
 @using Microsoft.AspNetCore.Mvc.RazorPages
+
 @if (Model.Message is string)
 {
     @Model.Message
@@ -26,6 +27,7 @@ else if (Model.Message is IDictionary<string, string>)
         </tbody>
     </table>
 }
+
 @functions {
     public class MessageModel : PageModel
     {
