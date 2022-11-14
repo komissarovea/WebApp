@@ -16,8 +16,10 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<GuidResponseAttribute>();
 builder.Services.Configure<MvcOptions>(opts =>
-    opts.Filters.Add<HttpsOnlyAttribute>());
-
+{
+    opts.Filters.Add<HttpsOnlyAttribute>();
+    opts.Filters.Add(new MessageAttribute("This is the globally-scoped filter"));
+});
 var app = builder.Build();
 
 app.UseStaticFiles();
