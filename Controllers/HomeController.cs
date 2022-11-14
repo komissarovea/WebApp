@@ -9,6 +9,7 @@ namespace WebApp.Controllers
     [ResultDiagnostics]
     [GuidResponse]
     [GuidResponse]
+    // [ServiceFilter(typeof(GuidResponseAttribute))]
     public class HomeController : Controller
     {
         public IActionResult Index()
