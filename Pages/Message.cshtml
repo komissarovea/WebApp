@@ -2,6 +2,7 @@
 @model MessageModel
 @using Microsoft.AspNetCore.Mvc.RazorPages
 @using WebApp.Filters
+@using Microsoft.AspNetCore.Mvc.Filters
 
 @if (Model.Message is string)
 {
@@ -32,21 +33,23 @@ else if (Model.Message is IDictionary<string, string>)
 @functions {
 
     [RequireHttps]
-    [SimpleCache]
+    @* [SimpleCache] *@
+    @* [ChangePageArgs] *@
     public class MessageModel : PageModel
     {
         public object Message { get; set; } = $"{DateTime.Now.ToLongTimeString()}: This is the Message Razor Page";
 
-        @* public IActionResult OnGet()
+        public void OnGet(string message1, string message2)
         {
-            if (!Request.IsHttps)
-                {
-                return new StatusCodeResult(StatusCodes.Status403Forbidden);
-                }
-                else
+            Message = $"{message1}, {message2}";
+        }
+
+        public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
+        {
+            if (context.HandlerArguments.ContainsKey("message1"))
             {
-                return Page();
+                context.HandlerArguments["message1"] = "New2a ";
             }
-        } *@
+        }
     }
 }
