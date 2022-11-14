@@ -2,31 +2,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers
 {
+    [RequireHttps]
     public class HomeController : Controller
     {
+        // [RequireHttps]
         public IActionResult Index()
         {
-            if (Request.IsHttps)
-            {
-                return View("Message", "This is the Index action on the Home controller");
-            }
-            else
-            {
-                return new StatusCodeResult(StatusCodes.Status403Forbidden);
-            }
+            return View("Message", "This is the Index action on the Home controller");
         }
 
+        // [RequireHttps]
         public IActionResult Secure()
         {
-            if (Request.IsHttps)
-            {
-                return View("Message",
-                "This is the Secure action on the Home controller");
-            }
-            else
-            {
-                return new StatusCodeResult(StatusCodes.Status403Forbidden);
-            }
+            return View("Message", "This is the Secure action on the Home controller");
         }
     }
 }
