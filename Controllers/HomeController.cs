@@ -6,6 +6,7 @@ namespace WebApp.Controllers
 {
     // [SimpleCache]
     [HttpsOnly]
+    [ResultDiagnostics]
     public class HomeController : Controller
     {
         public IActionResult Index()

@@ -33,6 +33,7 @@ else if (Model.Message is IDictionary<string, string>)
 @functions {
 
     [RequireHttps]
+    [ResultDiagnostics]
     @* [SimpleCache] *@
     @* [ChangePageArgs] *@
     public class MessageModel : PageModel
