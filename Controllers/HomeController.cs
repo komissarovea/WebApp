@@ -5,10 +5,10 @@ using WebApp.Filters;
 namespace WebApp.Controllers
 {
     // [SimpleCache]
-    [HttpsOnly]
+    // [HttpsOnly]
     [ResultDiagnostics]
-    [GuidResponse]
-    [GuidResponse]
+    // [GuidResponse]
+    // [GuidResponse]
     // [ServiceFilter(typeof(GuidResponseAttribute))]
     public class HomeController : Controller
     {
